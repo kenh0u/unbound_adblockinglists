@@ -1,0 +1,37 @@
+server:
+	verbosity: 0
+	statistics-cumulative: no
+	extended-statistics: no
+	num-threads: 1
+
+	interface: 127.0.0.1
+	interface: 192.168.1.1               # your local IPv4 address
+	interface: fc00::1                   # your local IPv6 address
+	interface-automatic: no
+	port: 53
+
+	edns-buffer-size: 512
+
+	do-ip4: yes
+	do-ip6: yes
+	do-udp: yes
+	do-tcp: yes
+
+	access-control: 0.0.0.0/0 refuse
+	access-control: 127.0.0.0/8 allow
+	access-control: 192.168.1.0/24 allow # your local IPv4 network
+	access-control: ::0/0 refuse
+	access-control: fc00::/64 allow      # your local IPv6 network
+
+	harden-referral-path: yes
+	module-config: "validator iterator"
+	val-permissive-mode: yes
+
+	include: /etc/unbound/blocking/*.conf
+
+forward-zone:
+	name: "."
+	forward-addr: 8.8.8.8                # primary IPv4 DNS
+	forward-addr: 8.8.4.4                # secondary IPv4 DNS
+	forward-addr: 2001:4860:4860::8888   # primary IPv6 DNS
+	forward-addr: 2001:4860:4860::8844   # secondary IPv6 DNS
